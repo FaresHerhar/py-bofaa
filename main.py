@@ -92,10 +92,11 @@ def init_population(fragments_number: int, population_size: int) -> List[List[in
 def oaf(sol: Solution, scores: List[List[int]]) -> int:
     oaf_value = 0
     sol_len = sol.genome_size
-    temp_genome = sol.genome
+    temp_genome = sol.genome.copy()
 
     for i in range(sol_len - 1):
         oaf_value += scores[temp_genome[i]][temp_genome[i + 1]] * 2
+    del temp_genome
 
     return oaf_value
 
@@ -103,12 +104,13 @@ def oaf(sol: Solution, scores: List[List[int]]) -> int:
 def odf(sol: Solution, scores: List[List[int]]) -> int:
     odf_value = 0
     sol_len = sol.genome_size
-    temp_genome = sol.genome
+    temp_genome = sol.genome.copy()
 
     for i in range(sol_len - 2):
         p = i
         for j in range(i + 2, sol_len):
             odf_value += ((j - p) * scores[temp_genome[i]][temp_genome[j]]) * 2
+    del temp_genome
 
     return odf_value
 
