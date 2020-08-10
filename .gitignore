@@ -1,0 +1,6 @@
+# ignore .vscode directory
+.vscode/*
+
+# __pycache__
+__pycache__/*
+models/__pycache__/*
