@@ -288,7 +288,7 @@ def domination(sol_1: Solution, sol_2: Solution) -> int:
     """This function test the dominance, between two solutions
     based on the two objective function listed above.
     It is for The Non-Domination Sorting Algorithm.
-    
+
     ...
 
     Parameters
@@ -312,3 +312,43 @@ def domination(sol_1: Solution, sol_2: Solution) -> int:
         return 1
     else:
         return 0
+
+
+def non_dominate_sorting(population: List[Solution]) -> List[List[int]]:
+    # It contains all our fonts, in which each solutoin belongs to only one.
+    fonts = [[]]
+    # Each solution my dominate other solutions, in that case they are stores here.
+    dominated = [[] for i in range(len(population))]
+    # In case a solution gets dominated by another solution, we store how many times.
+    dominate_number = [0 for i in range(len(population))]
+
+    # STEP-1: Calculation the first Font.
+    for p in range(len(population)):
+        for q in range(len(population)):
+            # Go to the domination function.
+            d = domination(population[p], population[q])
+            if d == -1:
+                dominated[p].append(q)
+            if d == 1:
+                dominate_number[p] += 1
+        if dominate_number[p] == 0:
+            fonts[0].append(p)
+    
+    # STEP-2: Calculating the rest of the Fonts.
+    fonts_counter = 1
+
+    while fonts_counter <= len(fonts):
+        for p in fonts[fonts_counter - 1]:
+            for q in dominated[p]:
+                dominate_number[q] -= 1
+
+                # if the solution is no longer dominated, add it to the next Front.
+                if dominate_number[q] == 0:
+                    if len(fonts) == fonts_counter:
+                        fonts.append([q])
+                    else:
+                        fonts[-1].append(q)
+        fonts_counter += 1
+    
+    return fonts
+                
