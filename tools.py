@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple
 from random import sample
 from math import factorial
 
@@ -30,7 +30,7 @@ def max_possible_samples(n: int, k: int) -> int:
         raise ValueError(
             "There is in error in your input, the size of the sample k,should not exeed the size of the space n.")
 
-    return factorial(n)/factorial(n-k)
+    return int(factorial(n)/factorial(n-k))
 
 
 def read_fragments(file_name: str) -> List[Fragment]:
@@ -298,8 +298,8 @@ def domination(sol_1: Solution, sol_2: Solution) -> int:
     sol_2: Solution
         The second solution.
 
-    Parameters
-    ----------
+    Returns
+    -------
     int
         An int value,
         if -1 sol_1 dominates sol_2.
@@ -315,6 +315,25 @@ def domination(sol_1: Solution, sol_2: Solution) -> int:
 
 
 def non_dominate_sorting(population: List[Solution]) -> List[List[int]]:
+    """This fonction is for the non dominate sorting for the NSGA-II Algorithm,
+    The how the function works wont be explained here, look at the full Algorithm
+    online, or take a look at the research paper.
+    It returns the fonts, where each font is a list of integers, that represents
+    the indexes of the solutions, in the population list.
+
+    ...
+
+    Parameters
+    ----------
+    population: list
+        A list of solutions.
+
+
+    Returns
+    -------
+    list
+        A list of lists of integers.
+    """
     # It contains all our fonts, in which each solutoin belongs to only one.
     fonts = [[]]
     # Each solution my dominate other solutions, in that case they are stores here.
@@ -333,7 +352,7 @@ def non_dominate_sorting(population: List[Solution]) -> List[List[int]]:
                 dominate_number[p] += 1
         if dominate_number[p] == 0:
             fonts[0].append(p)
-    
+
     # STEP-2: Calculating the rest of the Fonts.
     fonts_counter = 1
 
@@ -349,6 +368,5 @@ def non_dominate_sorting(population: List[Solution]) -> List[List[int]]:
                     else:
                         fonts[-1].append(q)
         fonts_counter += 1
-    
+
     return fonts
-                
