@@ -1,4 +1,5 @@
 from tools import *
+from time import time
 
 
 if __name__ == "__main__":
@@ -9,19 +10,18 @@ if __name__ == "__main__":
     # STEP 2, generate initial population
     population = init_population(len(fragments), 10)
 
-
     while True:
         # STEP 3, compute ODF and OAF fitness
         for sol in population:
             sol.oaf = oaf(sol, scores)
             sol.odf = odf(sol, scores)
-        
+
         for i in population:
             print(i)
             print("-----------")
-        
+
         # STEP 4, calculate the fonts
         fonts = non_dominate_sorting(population)
-        print(fonts)
+        print("Fonts::", fonts)
 
         break
