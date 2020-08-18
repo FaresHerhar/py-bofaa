@@ -16,12 +16,13 @@ if __name__ == "__main__":
             sol.oaf = oaf(sol, scores)
             sol.odf = odf(sol, scores)
 
-        for i in population:
-            print(i)
-            print("-----------")
-
         # STEP 4, calculate the fonts
         fonts = non_dominate_sorting(population)
         print("Fonts::", fonts)
 
+        # STEP 5, calculate the crowding distances
+        crownding = crowding_distance(population, fonts)
+        print("----------------------------------")
+        print(crownding[0], crownding[-1], sep="\n")
+        
         break
