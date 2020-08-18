@@ -68,9 +68,3 @@ class Solution:
 
         out = "* Genome:: {}\n* Genome size:: {}\n* OAF::{}\n* ODF:: {}\n* Generation:: {}"
         return out.format(self.genome, self.genome_size, self.oaf, self.odf, self.generation)
-
-    def __lt__(self, other):
-        """This function is for comparing an object with another.
-        This comparing is for ascendant ordering.
-        """
-        return self.oaf < other.oaf
