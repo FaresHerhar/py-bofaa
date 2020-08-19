@@ -8,7 +8,7 @@ if __name__ == "__main__":
     # STEP 1, compute pair wise overlap
     scores = overlap_scores(fragments)
     # STEP 2, generate initial population
-    population = init_population(len(fragments), 10)
+    population = init_population(len(fragments), 20)
 
     while True:
         # STEP 3, compute ODF and OAF fitness
@@ -18,11 +18,9 @@ if __name__ == "__main__":
 
         # STEP 4, calculate the fonts
         fonts = non_dominate_sorting(population)
-        print("Fonts::", fonts)
 
         # STEP 5, calculate the crowding distances
         crownding = crowding_distance(population, fonts)
-        print("----------------------------------")
-        print(crownding[0], crownding[-1], sep="\n")
+        print(crownding)
         
         break

@@ -372,7 +372,30 @@ def non_dominate_sorting(population: List[Solution]) -> List[List[int]]:
     return fonts
 
 
-def crowding_distance(population, fonts):
+def crowding_distance(population: List[Solution], fonts: List[List[int]]) -> List[float]:
+    """This function is for calculation the crowding distance of each solution.
+    at first we sort the solution, for each front based on oaf values,
+    and odf values separately, while odf ascendant dort, and oaf is descendant sort.
+    After that, we calculate the crownding distance for each solution,
+    with oaf and odf sorts, and exluding the limits of each sorted font(first and last element),
+    we set them to -1. Than, we chack if the values match the excluded and sum them.
+    It returns a list of floats, that represents the crowding distances for each solution.
+
+    ...
+
+    Parameters
+    ----------
+    population: list
+        A list of solutions.
+    fonts: list
+        A list of Fonts(list of int).
+
+
+    Returns
+    -------
+    list
+        A list of integers, that represents the crowding distance of each solution.
+    """
     # Each fonts, will be sorted first by oaf, then odf
     # while maximize oaf, and minimize odf
     oaf_sorted_fonts = []
@@ -381,6 +404,7 @@ def crowding_distance(population, fonts):
     # The crowding will be calculated, by oaf, odf separately, than summed
     oaf_cwrowding = [0 for i in range(len(population))]
     odf_cwrowding = [0 for i in range(len(population))]
+    crowding = [0 for i in range(len(population))]
 
     # STEP-0 sorting
     for p in fonts:
@@ -399,20 +423,42 @@ def crowding_distance(population, fonts):
 
     # STEP-1 calculate crowding distances
     # STEP-1.1 for oaf
-    for p in range(len(oaf_sorted_fonts)):
-        print(oaf_sorted_fonts[p])
-        oaf_cwrowding[oaf_sorted_fonts[p][0]] = 666
+    for p in oaf_sorted_fonts:
+        oaf_cwrowding[p[0]] = -1
         # The fraction of max - min
-        kill = population[oaf_sorted_fonts[p][0]].oaf - \
-            population[oaf_sorted_fonts[p][-1]].oaf
-        if len(oaf_sorted_fonts) > 1:
+        kill = population[p[0]].oaf - \
+            population[p[-1]].oaf
+        if len(p) > 1:
             temp_oaf = 0
-            oaf_cwrowding[oaf_sorted_fonts[p][-1]] = 666
+            oaf_cwrowding[p[-1]] = -1
+            # calculating the oaf crowding for each element of the font, excluding limits
+            for q in range(1, len(p) - 1):
+                temp_oaf += (population[p[q - 1]].oaf -
+                             population[p[q + 1]].oaf) / kill
+                oaf_cwrowding[p[q]] = temp_oaf
 
-            for q in range(1, len(oaf_sorted_fonts[p]) - 1):
-                    temp_oaf += (population[fonts[p][q + 1]
-                                            ].oaf - population[fonts[p][q - 1]].oaf) / kill
-                    
-                    oaf_cwrowding[fonts[p][q]] = temp_oaf
+    # STEP-1.2 for odf
+    for p in odf_sorted_fonts:
+        odf_cwrowding[p[0]] = -1
+        # The fraction of (max - min)
+        kill = population[p[-1]].odf - \
+            population[p[0]].odf
+        if len(p) > 1:
+            temp_odf = 0
+            odf_cwrowding[p[-1]] = -1
+            # calculating the oaf crowding for each element of the font, excluding limits
+            for q in range(1, len(p) - 1):
+                temp_odf += (population[p[q + 1]].odf -
+                             population[p[q - 1]].odf) / kill
+                odf_cwrowding[p[q]] = temp_odf
 
-    return [oaf_cwrowding, odf_cwrowding]
+    # STEP-2 assembling crowding distances
+    # since we sort twice, for odf and oaf, so some solution get exluded
+    # in one sort, and not in another, there for we will check
+    for index in range(len(population)):
+        if oaf_cwrowding[index] == -1 or odf_cwrowding[index] == -1:
+            crowding[index] = -1
+        else:
+            crowding[index] = oaf_cwrowding[index] + odf_cwrowding[index]
+
+    return crowding
