@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import List
 from random import sample
 from math import factorial
 
