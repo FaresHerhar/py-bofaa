@@ -72,5 +72,5 @@ class Solution:
         a solution, while all the details all printed.
         """ 
 
-        out = "* Genome:: {}\n* Genome size:: {}\n* OAF::{}\n* ODF:: {}\n* Generation:: {}"
-        return out.format(self.genome, self.genome_size, self.oaf, self.odf, self.generation)
+        out = "* Genome:: {}\n* Genome size:: {}\n* OAF::{}\n* ODF:: {}\n* Rank:: {}\n* Generation:: {}"
+        return out.format(self.genome, self.genome_size, self.oaf, self.odf, self.rank, self.generation)
