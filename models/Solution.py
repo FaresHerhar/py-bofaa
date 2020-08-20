@@ -19,6 +19,9 @@ class Solution:
     generation: int
         The number(index) of the generation, that can tell at what
         generation the solution was created.
+    rank:
+        The rank if the solution, i.e the fonts that the solution belongs to,
+        and it changes from a generation to another.
 
     Methods
     -------
@@ -28,7 +31,7 @@ class Solution:
         The print formating method.
     """
 
-    def __init__(self, genome, oaf=-1, odf=-1, generation=-1):
+    def __init__(self, genome, oaf=-1, odf=-1, generation=-1, rank=-1):
         """The constructor
 
         ...
@@ -49,6 +52,8 @@ class Solution:
             The number(index) of the generation, that can tell at what
             generation the solution was created. Durring the run time,
             once the Solution is computed, the generation will be assigned.
+        rank: int, optional
+            The rank if the solution, i.e the fonts that the solution belongs to.
 
         Rturns
         ------
@@ -60,6 +65,7 @@ class Solution:
         self.oaf = oaf
         self.odf = odf
         self.generation = generation
+        self.rank = rank
 
     def __str__(self):
         """This method returns the formating print format, to print out
