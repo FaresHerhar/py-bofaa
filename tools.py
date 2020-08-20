@@ -1,5 +1,5 @@
 from typing import List
-from random import sample
+from random import sample, randint
 from math import factorial
 
 from models.Fragment import Fragment
@@ -217,7 +217,7 @@ def init_population(fragments_number: int, population_size: int) -> List[Solutio
         # Check if the solution already exists.
         if hash_val not in hash_values:
             hash_values.add(hash_val)
-            solutions.append(Solution(sol))
+            solutions.append(Solution(sol, generation=1))
             count += 1
 
     return solutions
@@ -365,6 +365,7 @@ def non_dominate_sorting(population: List[Solution]) -> List[List[int]]:
 
                 # if the solution is no longer dominated, add it to the next Front.
                 if dominate_number[q] == 0:
+                    # set the rank to one, since it belongs to the next font.
                     population[q].rank = fonts_counter + 1
                     if len(fonts) == fonts_counter:
                         fonts.append([q])
@@ -461,7 +462,65 @@ def crowding_distance(population: List[Solution], fonts: List[List[int]]) -> Lis
     for index in range(len(population)):
         if oaf_cwrowding[index] == -1 or odf_cwrowding[index] == -1:
             crowding[index] = -1
+            population[index].crowding_distance = -1
         else:
             crowding[index] = oaf_cwrowding[index] + odf_cwrowding[index]
+            population[index].crowding_distance = oaf_cwrowding[index] + \
+                odf_cwrowding[index]
 
     return crowding
+
+
+def select_cross_solutions(population: List[Solution], cross_over_propability: int) -> List[int]:
+    """This function use the binary tournament selection method to select the layouts
+    for crossover and mutation i.e to generate the parent population PP.
+    It uses a tousize of 2, i.e selecting two solution randomly, comparing then picking,
+    untill the number of the solutions it equals to the poolsize, where the
+    poolsize is (cross_over_propability * the size of the population.)
+
+    ...
+
+    Parameters
+    ----------
+    cross_over_probability: int
+        The probability of cross over.
+    population: list
+        A list of solutions.
+
+
+    Returns
+    -------
+    list
+        A list of integers, that represents the selected solution for mutation.
+    """
+    population_size = len(population)
+    pool_size = round(population_size * cross_over_propability)
+    selection_counter = 0
+    selection = list()
+
+    while selection_counter != pool_size:
+        # Randomly select two solution from the population, and
+        # since we're using indexes, its easier to use integers.
+        first_selection = randint(0, population_size - 1)
+        second_selection = randint(0, population_size - 1)
+
+        # if the rank is not the same take the one with the less rank.
+        if population[first_selection].rank != population[second_selection].rank:
+            if population[first_selection].rank < population[second_selection].rank:
+                selection.append(first_selection)
+
+            if population[first_selection].rank > population[second_selection].rank:
+                selection.append(second_selection)
+
+            selection_counter += 1
+        # add the one with gratter crowding distance
+        else:
+            if population[first_selection].crowding_distance <= population[second_selection].crowding_distance:
+                selection.append(first_selection)
+
+            if population[first_selection].crowding_distance >= population[second_selection].crowding_distance:
+                selection.append(second_selection)
+
+            selection_counter += 1
+
+    return selection
