@@ -22,6 +22,9 @@ class Solution:
     rank:
         The rank if the solution, i.e the fonts that the solution belongs to,
         and it changes from a generation to another.
+    crowding_distance: float, optional
+        The crowding distance of the solution that changes, from a generation
+        to a generation, based on the font that it belongs to.
 
     Methods
     -------
@@ -31,7 +34,7 @@ class Solution:
         The print formating method.
     """
 
-    def __init__(self, genome, oaf=-1, odf=-1, generation=-1, rank=-1):
+    def __init__(self, genome, oaf=-1, odf=-1, generation=-1, rank=-1, crowding_distance=-1):
         """The constructor
 
         ...
@@ -54,6 +57,9 @@ class Solution:
             once the Solution is computed, the generation will be assigned.
         rank: int, optional
             The rank if the solution, i.e the fonts that the solution belongs to.
+        crowding_distance: float, optional
+            The crowding distance of the solution that changes, from a generation
+            to a generation, based on the font that it belongs to.
 
         Rturns
         ------
@@ -66,11 +72,12 @@ class Solution:
         self.odf = odf
         self.generation = generation
         self.rank = rank
+        self.crowding_distance = crowding_distance
 
     def __str__(self):
         """This method returns the formating print format, to print out
         a solution, while all the details all printed.
-        """ 
+        """
 
-        out = "* Genome:: {}\n* Genome size:: {}\n* OAF::{}\n* ODF:: {}\n* Rank:: {}\n* Generation:: {}"
-        return out.format(self.genome, self.genome_size, self.oaf, self.odf, self.rank, self.generation)
+        out = "* Genome:: {}\n* Genome size:: {}\n* OAF::{}\n* ODF:: {}\n* Rank:: {}\n* Crowding distance:: {}\n* Generation:: {}"
+        return out.format(self.genome, self.genome_size, self.oaf, self.odf, self.rank, self.crowding_distance, self.generation)
