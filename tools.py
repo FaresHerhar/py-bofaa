@@ -352,6 +352,8 @@ def non_dominate_sorting(population: List[Solution]) -> List[List[int]]:
                 dominate_number[p] += 1
         if dominate_number[p] == 0:
             fonts[0].append(p)
+            # set the rank to one, since it belongs to the first font.
+            population[p].rank = 1
 
     # STEP-2: Calculating the rest of the Fonts.
     fonts_counter = 1
@@ -363,6 +365,7 @@ def non_dominate_sorting(population: List[Solution]) -> List[List[int]]:
 
                 # if the solution is no longer dominated, add it to the next Front.
                 if dominate_number[q] == 0:
+                    population[q].rank = fonts_counter + 1
                     if len(fonts) == fonts_counter:
                         fonts.append([q])
                     else:
