@@ -34,7 +34,7 @@ class Solution:
         The print formating method.
     """
 
-    def __init__(self, genome, oaf=-1, odf=-1, generation=-1, rank=-1, crowding_distance=-1):
+    def __init__(self, genome, oaf=-1, odf=-1, generation=-1, rank=-1, crowding_distance=-1.0):
         """The constructor
 
         ...

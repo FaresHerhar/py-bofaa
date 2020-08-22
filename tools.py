@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple, Set
 from random import sample, randint
 from math import factorial
 
@@ -175,7 +175,7 @@ def overlap_scores(fragments: List[Fragment]) -> List[List[int]]:
     return scores
 
 
-def init_population(fragments_number: int, population_size: int) -> List[Solution]:
+def init_population(fragments_number: int, population_size: int) -> Tuple[List[Solution], Set[int]]:
     """This function create the initial population for the NSGA-II algorithm.
 
     ...
@@ -220,7 +220,7 @@ def init_population(fragments_number: int, population_size: int) -> List[Solutio
             solutions.append(Solution(sol, generation=1))
             count += 1
 
-    return solutions
+    return solutions, hash_values
 
 
 def oaf(sol: Solution, scores: List[List[int]]) -> int:
@@ -408,7 +408,7 @@ def crowding_distance(population: List[Solution], fonts: List[List[int]]) -> Lis
     # The crowding will be calculated, by oaf, odf separately, than summed
     oaf_cwrowding = [0 for i in range(len(population))]
     odf_cwrowding = [0 for i in range(len(population))]
-    crowding = [0 for i in range(len(population))]
+    crowding = [0.0 for i in range(len(population))]
 
     # STEP-0 sorting
     for p in fonts:
@@ -461,12 +461,13 @@ def crowding_distance(population: List[Solution], fonts: List[List[int]]) -> Lis
     # in one sort, and not in another, there for we will check
     for index in range(len(population)):
         if oaf_cwrowding[index] == -1 or odf_cwrowding[index] == -1:
-            crowding[index] = -1
-            population[index].crowding_distance = -1
+            crowding[index] = float(-1)
+            population[index].crowding_distance = -float(-1)
         else:
-            crowding[index] = oaf_cwrowding[index] + odf_cwrowding[index]
-            population[index].crowding_distance = oaf_cwrowding[index] + \
-                odf_cwrowding[index]
+            crowding[index] = float(
+                oaf_cwrowding[index] + odf_cwrowding[index])
+            population[index].crowding_distance = float(oaf_cwrowding[index] +
+                                                        odf_cwrowding[index])
 
     return crowding
 
