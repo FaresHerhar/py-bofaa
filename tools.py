@@ -499,6 +499,10 @@ def select_cross_solutions(population: List[Solution], cross_over_propability: i
     selection_counter = 0
     selection = list()
 
+    # To always make sure we have faircross pairs.
+    if (pool_size % 2) != 0:
+        pool_size -= 1
+
     while selection_counter != pool_size:
         # Randomly select two solution from the population, and
         # since we're using indexes, its easier to use integers.
@@ -525,3 +529,34 @@ def select_cross_solutions(population: List[Solution], cross_over_propability: i
             selection_counter += 1
 
     return selection
+
+
+def cross_over(population, selection, hash_values):
+    cross_childs = list()
+    g_len = len(population[0].genome)
+
+    for p in range(0, len(selection) - 1, 2):
+        p_1 = population[selection[p]].genome.copy()
+        p_2 = population[selection[p + 1]].genome.copy()
+
+        point_1 = randint(0, g_len)
+        point_2 = sample([i for i in range(g_len) if i != point_1], 1)[0]
+
+        if point_1 > point_2:
+            point_1, point_2 = point_2, point_1
+
+        # print(point_1, point_2)
+
+        c_1 = p_1[:point_1]+p_2[point_1:point_2]+p_1[point_2:]
+        c_2 = p_2[:point_1]+p_1[point_1:point_2]+p_2[point_2:]
+
+        for sol in [c_1, c_2]:
+            if len(set(sol)) == g_len:
+                hash_val = hash(tuple(sol))
+
+                # Check if the solution already exists.
+                if hash_val not in hash_values:
+                    hash_values.add(hash_val)
+                    cross_childs.append(Solution(sol, generation=1))
+
+    return cross_childs, hash_values
