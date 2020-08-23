@@ -223,67 +223,6 @@ def init_population(fragments_number: int, population_size: int) -> Tuple[List[S
     return solutions, hash_values
 
 
-def oaf(sol: Solution, scores: List[List[int]]) -> int:
-    """It is  the first objective function, Overlaping Adjacent Fragments.
-
-    ...
-
-    Parameters
-    ----------
-    sol: Solution
-        The solution that we want to calculate its first objective function.
-    scores: list
-        A list of list(matrix) of int, that contains the overlaping scores.
-
-    Returns
-    -------
-    int
-        The Overlaping Adjacent Fragments values, of the given solution.
-    """
-
-    oaf_value = 0
-    sol_len = sol.genome_size
-    temp_genome = sol.genome.copy()  # To avoid the over memotry access
-
-    # Can't explain, take a look at the research paper(/papers)
-    for i in range(sol_len - 1):
-        oaf_value += scores[temp_genome[i]][temp_genome[i + 1]] * 2
-    del temp_genome
-
-    return oaf_value
-
-
-def odf(sol: Solution, scores: List[List[int]]) -> int:
-    """It is  the second objective function, Overlaping Distant Fragments.
-
-    ...
-
-    Parameters
-    ----------
-    sol: Solution
-        The solution that we want to calculate its second objective function.
-    scores: list
-        A list of list(matrix) of int, that contains the overlaping scores.
-
-    Returns
-    -------
-    int
-        The Overlaping Distant Fragments values, of the given solution.
-    """
-    odf_value = 0
-    sol_len = sol.genome_size
-    temp_genome = sol.genome.copy()  # To avoid the over memotry access
-
-    # Can't explain, take a look at the research paper(/papers)
-    for i in range(sol_len - 2):
-        p = i
-        for j in range(i + 2, sol_len):
-            odf_value += ((j - p) * scores[temp_genome[i]][temp_genome[j]]) * 2
-    del temp_genome
-
-    return odf_value
-
-
 def domination(sol_1: Solution, sol_2: Solution) -> int:
     """This function test the dominance, between two solutions
     based on the two objective function listed above.
@@ -662,4 +601,4 @@ def contigs_number(solution: Solution, scores: List[List[int]]) -> int:
         if scores[temp[index]][temp[index + 1]] == 0:
             contigs_counter += 1
 
-    return contigs_counter 
+    return contigs_counter

@@ -34,8 +34,8 @@ if __name__ == "__main__":
         print("\tG-{} --> STEP-3 :: CALCULATING OBJECTIVE FUNCTIONS.".format(generation_counter))
         # STEP 3, compute ODF and OAF fitness
         for sol in population:
-            sol.oaf = oaf(sol, scores)
-            sol.odf = odf(sol, scores)
+            sol.oaf_objective(scores)
+            sol.odf_objective(scores)
 
         print("\tG-{} --> STEP-4 :: CALCULATING AND ATTRIBUTING FONTS.".format(generation_counter))
         # STEP 4, calculate the fonts
@@ -64,8 +64,8 @@ if __name__ == "__main__":
         print("\tG-{} --> STEP-8.1 :: CALCULATING OBJECTIVE FUNCTIONS FOR CHILDS.".format(generation_counter))
         # STEP 8.1, calculate oaf, odf to the childs
         for child in childs:
-            child.oaf = oaf(child, scores)
-            child.odf = odf(child, scores)
+            child.oaf_objective(scores)
+            child.odf_objective(scores)
 
         # STEP 8.2, merge child with current population
         print(
