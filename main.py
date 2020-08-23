@@ -8,9 +8,11 @@ if __name__ == "__main__":
     GENERATIONS_NUMBER = 100
     POPULATION_SIZE = 10
     OVECTIVE_FUNCTIONS_NUMBER = 2
-    SCORE_CONDITION = 5
-    # BECHMARK_FILE = "benchmarks/dna-instances/x60189_4.dat"
-    BECHMARK_FILE = "benchmarks/test.dat"
+    MATCH_SCORE = 1
+    MISMATCH_SCORE = -0.33
+    GAP_COST = -1.33
+    BECHMARK_FILE = "benchmarks/dna-instances/x60189_4.dat"
+    # BECHMARK_FILE = "benchmarks/test.dat"
 
     # Counting the number of generations
     generation_counter = 1
@@ -22,7 +24,7 @@ if __name__ == "__main__":
 
     # STEP 1, compute pair wise overlap
     print("STEP-1 :: CALCULATING THE OVERLAP SCORES.")
-    scores = overlap_scores(fragments, SCORE_CONDITION)
+    scores = overlap_scores(fragments, MATCH_SCORE, MISMATCH_SCORE, GAP_COST)
 
     # STEP 2, generate initial population, and retreving the set of the solutions
     print("STEP-2 :: GENERATING SOLUTIONS (INITIAL POPULATION).")
@@ -91,7 +93,7 @@ if __name__ == "__main__":
         generation_counter += 1
 
     for p in sorted(population, key=lambda x: x.rank):
-        p.contigs += contigs_number(p, scores)
+        p.contigs_number(scores)
         print(p)
         print("---------------")
 

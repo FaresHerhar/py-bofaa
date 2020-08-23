@@ -68,9 +68,8 @@ def read_fragments(file_name: str) -> List[Fragment]:
     return fragments
 
 
-def longest_common(str_1: str, str_2: str) -> int:
-    """This function Calculate, The Longest Common Subsequence
-    between two sequences(in our case strings).
+def waterman_algorithm(str_1: str, str_2: str, match_score: int, mismatch_score: int, gap_cost: int) -> int:
+    """Take a look at The smith waterman algorithm.
 
     ...
 
@@ -79,7 +78,13 @@ def longest_common(str_1: str, str_2: str) -> int:
     str_1: str
         The first sequence(string)
     str_1: str
-        The second sequence(string)
+        The second sequence(string
+    match_score: int
+        A positive int, we add in case to caracters match.
+    mismatch_score: int
+        A negative int, we add in case to caracters don't match.
+    gap_cost: int
+        A negative int, for the gap.
 
     Rturns
     ------
@@ -103,23 +108,22 @@ def longest_common(str_1: str, str_2: str) -> int:
             # skip this one because it doesn't represent any thing.
             if (i == 0) or (j == 0):
                 H[i][j] = 0
-            # In case of a match update, the result variable.
-            elif str_1[i - 1] == str_2[j - 1]:
-                H[i][j] = H[i - 1][j - 1] + 1
-                result = max(result, H[i][j])
-            # In case of a mismatch, just put zero.
             else:
-                H[i][j] = 0
+                match = H[i - 1][j - 1] + \
+                    (match_score if str_1[i - 1] ==
+                     str_2[j - 1] else + mismatch_score)
+                delete = H[i - 1][j] + gap_cost
+                insert = H[i][j - 1] + gap_cost
+                result = H[i][j] = max(match, delete, insert, 0)
 
     return result
 
 
-def overlap(frag_1: Fragment, frag_2: Fragment, score_condition: int) -> int:
+def overlap(frag_1: Fragment, frag_2: Fragment, match_score: int, mismatch_score: int, gap_cost: int) -> int:
     """This function calculates the overlap of two fragments,
     in our case means the longest common nucleotides sequence,
-    based on the same method of the longest common string
-    of two string, since we're working on DNA sequences that are
-    Strings based.
+    based on the same method of the waterman_algorithm.
+    Take a look at The smith waterman algorithm.
 
     ...
 
@@ -129,21 +133,22 @@ def overlap(frag_1: Fragment, frag_2: Fragment, score_condition: int) -> int:
         The first fragment.
     frag_2: Fragment
         The second fragment.
+    match_score: int
+        A positive int, we add in case to caracters match.
+    mismatch_score: int
+        A negative int, we add in case to caracters don't match.
+    gap_cost: int
+        A negative int, for the gap.
 
     Returns
     -------
     int
        The longest common nucleotides sequence.
     """
-    temp = longest_common(frag_1.sequence, frag_2.sequence)
-    
-    if temp < score_condition:
-        return 0
-    
-    return temp
+    return waterman_algorithm(frag_1.sequence, frag_2.sequence, match_score, mismatch_score, gap_cost)
 
 
-def overlap_scores(fragments: List[Fragment], score_condition: int) -> List[List[int]]:
+def overlap_scores(fragments: List[Fragment], match_score: int, mismatch_score: int, gap_cost: int) -> List[List[int]]:
     """This function calculates the overlap scores between each fragment
     and another, then the scores are all stored in a matrix.
 
@@ -158,6 +163,12 @@ def overlap_scores(fragments: List[Fragment], score_condition: int) -> List[List
     ----------
     fragments: list
         A list of fragments.
+    match_score: int
+        A positive int, we add in case to caracters match.
+    mismatch_score: int
+        A negative int, we add in case to caracters don't match.
+    gap_cost: int
+        A negative int, for the gap.
     Returns
     -------
     list
@@ -171,10 +182,11 @@ def overlap_scores(fragments: List[Fragment], score_condition: int) -> List[List
 
     for i in range(0, len_frag - 1):
         for j in range(i + 1, len_frag):
-            # Since longest_common(a, b) == longest_common(b, a)
+            # Since waterman_algorithm(a, b) == waterman_algorithm(b, a)
             # we don't have to calculate twice, therefore we do
             # the calculations once, and we assign twice.
-            scores[i][j] = scores[j][i] = overlap(fragments[i], fragments[j], score_condition)
+            scores[i][j] = scores[j][i] = overlap(
+                fragments[i], fragments[j], match_score, mismatch_score, gap_cost)
 
     return scores
 
@@ -380,9 +392,14 @@ def crowding_distance(population: List[Solution], fonts: List[List[int]]) -> Lis
             oaf_cwrowding[p[-1]] = -1
             # calculating the oaf crowding for each element of the font, excluding limits
             for q in range(1, len(p) - 1):
-                temp_oaf += (population[p[q - 1]].oaf -
-                             population[p[q + 1]].oaf) / kill
-                oaf_cwrowding[p[q]] = temp_oaf
+                # In case a division by zero, which means infinity(Maths limits)
+                # so it goes by -1, as an indecation, as the boundries(limits)
+                try:
+                    temp_oaf += (population[p[q - 1]].oaf -
+                                 population[p[q + 1]].oaf) / kill
+                    oaf_cwrowding[p[q]] = temp_oaf
+                except ZeroDivisionError:
+                    oaf_cwrowding[p[q]] = -1
 
     # STEP-1.2 for odf
     for p in odf_sorted_fonts:
@@ -596,13 +613,3 @@ def mutation(population: List[Solution], selection: List[int], hash_values: Set[
                     Solution(sol, generation=generation_counter))
 
     return mutation_childs
-
-
-def contigs_number(solution: Solution, scores: List[List[int]]) -> int:
-    contigs_counter = 0
-    temp = solution.genome.copy()
-    for index in range(0, len(temp) - 1):
-        if scores[temp[index]][temp[index + 1]] == 0:
-            contigs_counter += 1
-
-    return contigs_counter
