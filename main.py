@@ -9,7 +9,7 @@ if __name__ == "__main__":
     POPULATION_SIZE = 10
     OVECTIVE_FUNCTIONS_NUMBER = 2
     MATCH_SCORE = 1
-    MISMATCH_SCORE = -0.33
+    MISMATCH_SCORE = -1
     GAP_COST = -1.33
     BECHMARK_FILE = "benchmarks/dna-instances/x60189_4.dat"
     # BECHMARK_FILE = "benchmarks/test.dat"
