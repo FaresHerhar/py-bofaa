@@ -217,7 +217,7 @@ def init_population(fragments_number: int, population_size: int) -> Tuple[List[S
         # Check if the solution already exists.
         if hash_val not in hash_values:
             hash_values.add(hash_val)
-            solutions.append(Solution(sol, generation=1))
+            solutions.append(Solution(sol, generation=0))
             count += 1
 
     return solutions, hash_values
@@ -452,9 +452,14 @@ def crowding_distance(population: List[Solution], fonts: List[List[int]]) -> Lis
             odf_cwrowding[p[-1]] = -1
             # calculating the oaf crowding for each element of the font, excluding limits
             for q in range(1, len(p) - 1):
-                temp_odf += (population[p[q + 1]].odf -
-                             population[p[q - 1]].odf) / kill
-                odf_cwrowding[p[q]] = temp_odf
+                # In case a division by zero, which means infinity(Maths limits)
+                # so it goes by -1, as an indecation, as the boundries(limits)
+                try:
+                    temp_odf += (population[p[q + 1]].odf -
+                                 population[p[q - 1]].odf) / kill
+                    odf_cwrowding[p[q]] = temp_odf
+                except ZeroDivisionError:
+                    odf_cwrowding[p[q]] = -1
 
     # STEP-2 assembling crowding distances
     # since we sort twice, for odf and oaf, so some solution get exluded
@@ -462,7 +467,7 @@ def crowding_distance(population: List[Solution], fonts: List[List[int]]) -> Lis
     for index in range(len(population)):
         if oaf_cwrowding[index] == -1 or odf_cwrowding[index] == -1:
             crowding[index] = float(-1)
-            population[index].crowding_distance = -float(-1)
+            population[index].crowding_distance = float(-1)
         else:
             crowding[index] = float(
                 oaf_cwrowding[index] + odf_cwrowding[index])
@@ -483,8 +488,8 @@ def select_cross_solutions(population: List[Solution], cross_over_propability: i
 
     Parameters
     ----------
-    cross_over_probability: int
-        The probability of cross over.
+    cross_over_probability: float
+        The probability of operating a crossover.
     population: list
         A list of solutions.
 
@@ -531,7 +536,31 @@ def select_cross_solutions(population: List[Solution], cross_over_propability: i
     return selection
 
 
-def cross_over(population: List[Solution], selection: List[int], hash_values: Set[int]) -> Tuple[List[Solution], Set[int]]:
+def crossover(population: List[Solution], selection: List[int], hash_values: Set[int], generation_counter: int) -> List[Solution]:
+    """This function if for operating the cross over operation on the selection pool solutions
+    in order to for new child solution from two parents.
+    The functions uses the double point crossover, while checking the validity and the existance
+    of the solution before.
+
+    ...
+
+    Parameters
+    ----------
+    population: list
+        A list of solutions.
+    selectoin: list
+        A list of int(solutions indexes) for the selection pool.
+    hash_values: set
+        A set of int, that contains the hash values of the already exists solutions.
+    generation_counter: int
+        An int, that represents the generation number that the solution will be created at.
+
+
+    Returns
+    -------
+    list
+        A list of solutions, that represents the new created solotions from the crossover process.
+    """
     # carry the cross over childs.
     cross_childs = list()
     # The number of the fragments, whch equals to the lenght of the solution.
@@ -564,10 +593,63 @@ def cross_over(population: List[Solution], selection: List[int], hash_values: Se
                 # Check if the solution already exists.
                 if hash_val not in hash_values:
                     hash_values.add(hash_val)
-                    cross_childs.append(Solution(sol, generation=1))
+                    cross_childs.append(
+                        Solution(sol, generation=generation_counter))
 
     # we should return the hash values to update it, in the main function
-    return cross_childs, hash_values
+    return cross_childs
 
 
-# def mutation
+def mutation(population: List[Solution], selection: List[int], hash_values: Set[int], mutation_probability: float, generation_counter: int) -> List[Solution]:
+    """
+    This function if for operating the mutation operation on the selection pool solutions
+    in order to for new child solution from mutating one parent.
+    The functions uses the swaping mutation type, we randomly pick two point, and swap them;
+    while checking the validity and the existance of the solution before.
+
+    ...
+
+    Parameters
+    ----------
+    population: list
+        A list of solutions.
+    selectoin: list
+        A list of int(solutions indexes) for the selection pool.
+    hash_values: set
+        A set of int, that contains the hash values of the already exists solutions.
+    mutation_probability: float
+        A float, to determine the mutation rate.
+    generation_counter: int
+        An int, that represents the generation number that the solution will created at.
+
+
+    Returns
+    -------
+    list
+        A list of solutions, that represents the new created solotions from the crossover process.
+    """
+    # carry the cross over childs.
+    mutation_childs = list()
+    # The number of the fragments, whch equals to the lenght of the solution.
+    g_len = len(population[0].genome)
+
+    for p in selection:
+        if random() < mutation_probability:
+            # Copy the solution picked genomes, to avoid mutability damage.
+            sol = population[p].genome.copy()
+
+            # Generate to random points, and make sure they are not equal.
+            point_1 = randint(0, g_len - 1)
+            point_2 = sample([i for i in range(g_len) if i != point_1], 1)[0]
+
+            # Do swap mutation.
+            sol[point_2], sol[point_1] = sol[point_1], sol[point_2]
+            hash_val = hash(tuple(sol))
+
+            # Check if the solution already exists.
+            if hash_val not in hash_values:
+                hash_values.add(hash_val)
+                mutation_childs.append(
+                    Solution(sol, generation=generation_counter))
+
+    return mutation_childs
