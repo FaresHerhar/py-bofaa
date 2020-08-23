@@ -40,7 +40,7 @@ class Solution:
     """
 
     def __init__(self, genome, generation=-1):
-        """The constructor
+        """The constructor.
 
         ...
 
@@ -65,7 +65,7 @@ class Solution:
         self.odf = -1
         self.rank = -1
         self.crowding_distance = -1
-        self.contigs = 1
+        self.contigs = -1
 
     def __str__(self):
         """This method returns the formating print format, to print out
@@ -117,3 +117,27 @@ class Solution:
             for j in range(i + 2, self.genome_size):
                 self.odf += ((j - p) *
                              scores[self.genome[i]][self.genome[j]]) * 2
+
+    def contigs_number(self, scores: List[List[int]]) -> None:
+        """It is the function that calculates the number of contigs in a solution.
+        For a genome of N fragments, initially NC=1 and for i=1, 2, ...,N-1,
+        if score[i, i+1]=0 then NC=NC+1.
+
+        ...
+
+        Parameters
+        ----------
+        scores: list
+            A list of list(matrix) of int, that contains the overlaping scores.
+
+        Returns
+        -------
+        None
+        """
+        self.contigs = 1
+
+        # If a score between to fragments, is less than a score condition calulated
+        # we increment the number of the contigs
+        for index in range(0, self.genome_size - 1):
+            if scores[self.genome[index]][self.genome[index + 1]] == 0:
+                self.contigs += 1
