@@ -1,3 +1,6 @@
+from typing import List
+
+
 class Solution:
     """This is a Solution class that represent a Solution for the
     dna sequencing problem.
@@ -36,7 +39,7 @@ class Solution:
         The print formating method.
     """
 
-    def __init__(self, genome, oaf=-1, odf=-1, generation=-1, rank=-1, crowding_distance=-1.0, contigs=1):
+    def __init__(self, genome, generation=-1):
         """The constructor
 
         ...
@@ -45,25 +48,10 @@ class Solution:
         ----------
         genome: list
             The list of the Fragments that represents a solution.
-        oaf: int, optional
-            The value of the first objective function, overlaping adjacent
-            fragments. Durring the run time this variable will be
-            assigned by the first objective function.
-        odf: int, optional
-            The value of the second objective function, overlaping distinct
-            fragments.  Durring the run time this variable will be
-            assigned by the second objective function.
         genration: int, optional
             The number(index) of the generation, that can tell at what
             generation the solution was created. Durring the run time,
             once the Solution is computed, the generation will be assigned.
-        rank: int, optional
-            The rank if the solution, i.e the fonts that the solution belongs to.
-        crowding_distance: float, optional
-            The crowding distance of the solution that changes, from a generation
-            to a generation, based on the font that it belongs to.
-        contigs: int
-            The number of contigs.
 
         Rturns
         ------
@@ -72,12 +60,12 @@ class Solution:
 
         self.genome = genome
         self.genome_size = len(self.genome)
-        self.oaf = oaf
-        self.odf = odf
+        self.oaf = 0
+        self.odf = 0
         self.generation = generation
-        self.rank = rank
-        self.crowding_distance = crowding_distance
-        self.contigs = contigs
+        self.rank = -1
+        self.crowding_distance = -1
+        self.contigs = 1
 
     def __str__(self):
         """This method returns the formating print format, to print out
@@ -86,3 +74,44 @@ class Solution:
 
         out = "* Genome:: {}\n* Genome size:: {}\n* OAF::{}\n* ODF:: {}\n* Rank:: {}\n* Crowding distance:: {}\n* Contigs number:: {}\n* Generation:: {}"
         return out.format(self.genome, self.genome_size, self.oaf, self.odf, self.rank, self.crowding_distance, self.contigs, self.generation)
+
+    def oaf_objective(self, scores: List[List[int]]) -> None:
+        """It is  the first objective function, Overlaping Adjacent Fragments.
+
+        ...
+
+        Parameters
+        ----------
+        scores: list
+            A list of list(matrix) of int, that contains the overlaping scores.
+
+        Returns
+        -------
+        None
+        """
+
+        # Can't explain, take a look at the research paper(/papers)
+        for i in range(self.genome_size - 1):
+            self.oaf += scores[self.genome[i]][self.genome[i + 1]] * 2
+
+    def odf_objective(self, scores: List[List[int]]) -> None:
+        """It is  the second objective function, Overlaping Distant Fragments.
+
+        ...
+
+        Parameters
+        ----------
+        scores: list
+            A list of list(matrix) of int, that contains the overlaping scores.
+
+        Returns
+        -------
+            None
+        """
+
+        # Can't explain, take a look at the research paper(/papers)
+        for i in range(self.genome_size - 2):
+            p = i
+            for j in range(i + 2, self.genome_size):
+                self.odf += ((j - p) *
+                             scores[self.genome[i]][self.genome[j]]) * 2
