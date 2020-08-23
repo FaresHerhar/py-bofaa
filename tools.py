@@ -1,5 +1,5 @@
 from typing import List, Tuple, Set
-from random import sample, randint
+from random import sample, randint, random
 from math import factorial
 
 from models.Fragment import Fragment
@@ -531,27 +531,34 @@ def select_cross_solutions(population: List[Solution], cross_over_propability: i
     return selection
 
 
-def cross_over(population, selection, hash_values):
+def cross_over(population: List[Solution], selection: List[int], hash_values: Set[int]) -> Tuple[List[Solution], Set[int]]:
+    # carry the cross over childs.
     cross_childs = list()
+    # The number of the fragments, whch equals to the lenght of the solution.
     g_len = len(population[0].genome)
 
+    # Parcour the solutions by pair, step equels to 2.
     for p in range(0, len(selection) - 1, 2):
+        # Copyt the solution picked genomes, to avoid mutability damage.
         p_1 = population[selection[p]].genome.copy()
         p_2 = population[selection[p + 1]].genome.copy()
 
-        point_1 = randint(0, g_len)
+        # Generate to random points, and make sure they are not equal.
+        point_1 = randint(0, g_len - 1)
         point_2 = sample([i for i in range(g_len) if i != point_1], 1)[0]
 
+        # Make sure the first point is less than the second one.
         if point_1 > point_2:
             point_1, point_2 = point_2, point_1
 
-        # print(point_1, point_2)
-
+        # Create children.
         c_1 = p_1[:point_1]+p_2[point_1:point_2]+p_1[point_2:]
         c_2 = p_2[:point_1]+p_1[point_1:point_2]+p_2[point_2:]
 
         for sol in [c_1, c_2]:
+            # Check if it is a valid solution.
             if len(set(sol)) == g_len:
+                # We can't calculate the hash value of mutable objects.
                 hash_val = hash(tuple(sol))
 
                 # Check if the solution already exists.
@@ -559,4 +566,8 @@ def cross_over(population, selection, hash_values):
                     hash_values.add(hash_val)
                     cross_childs.append(Solution(sol, generation=1))
 
+    # we should return the hash values to update it, in the main function
     return cross_childs, hash_values
+
+
+# def mutation
