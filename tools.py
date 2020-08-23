@@ -114,7 +114,7 @@ def longest_common(str_1: str, str_2: str) -> int:
     return result
 
 
-def overlap(frag_1: Fragment, frag_2: Fragment) -> int:
+def overlap(frag_1: Fragment, frag_2: Fragment, score_condition: int) -> int:
     """This function calculates the overlap of two fragments,
     in our case means the longest common nucleotides sequence,
     based on the same method of the longest common string
@@ -135,11 +135,15 @@ def overlap(frag_1: Fragment, frag_2: Fragment) -> int:
     int
        The longest common nucleotides sequence.
     """
+    temp = longest_common(frag_1.sequence, frag_2.sequence)
+    
+    if temp < score_condition:
+        return 0
+    
+    return temp
 
-    return longest_common(frag_1.sequence, frag_2.sequence)
 
-
-def overlap_scores(fragments: List[Fragment]) -> List[List[int]]:
+def overlap_scores(fragments: List[Fragment], score_condition: int) -> List[List[int]]:
     """This function calculates the overlap scores between each fragment
     and another, then the scores are all stored in a matrix.
 
@@ -170,7 +174,7 @@ def overlap_scores(fragments: List[Fragment]) -> List[List[int]]:
             # Since longest_common(a, b) == longest_common(b, a)
             # we don't have to calculate twice, therefore we do
             # the calculations once, and we assign twice.
-            scores[i][j] = scores[j][i] = overlap(fragments[i], fragments[j])
+            scores[i][j] = scores[j][i] = overlap(fragments[i], fragments[j], score_condition)
 
     return scores
 

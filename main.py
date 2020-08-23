@@ -8,6 +8,7 @@ if __name__ == "__main__":
     GENERATIONS_NUMBER = 100
     POPULATION_SIZE = 10
     OVECTIVE_FUNCTIONS_NUMBER = 2
+    SCORE_CONDITION = 5
     # BECHMARK_FILE = "benchmarks/dna-instances/x60189_4.dat"
     BECHMARK_FILE = "benchmarks/test.dat"
 
@@ -21,7 +22,7 @@ if __name__ == "__main__":
 
     # STEP 1, compute pair wise overlap
     print("STEP-1 :: CALCULATING THE OVERLAP SCORES.")
-    scores = overlap_scores(fragments)
+    scores = overlap_scores(fragments, SCORE_CONDITION)
 
     # STEP 2, generate initial population, and retreving the set of the solutions
     print("STEP-2 :: GENERATING SOLUTIONS (INITIAL POPULATION).")
