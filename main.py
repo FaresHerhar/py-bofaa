@@ -8,6 +8,8 @@ if __name__ == "__main__":
     GENERATIONS_NUMBER = 100
     POPULATION_SIZE = 10
     OVECTIVE_FUNCTIONS_NUMBER = 2
+    # BECHMARK_FILE = "benchmarks/dna-instances/x60189_4.dat"
+    BECHMARK_FILE = "benchmarks/test.dat"
 
     # Counting the number of generations
     generation_counter = 1
@@ -15,8 +17,7 @@ if __name__ == "__main__":
     start = time()
     # STEP 0, reading fragments from file
     print("STEP-0 :: READING FRAGMENTS.")
-    # dna-instances/x60189_4.dat
-    fragments = read_fragments("benchmarks/test.dat")
+    fragments = read_fragments(BECHMARK_FILE)
 
     # STEP 1, compute pair wise overlap
     print("STEP-1 :: CALCULATING THE OVERLAP SCORES.")
@@ -88,8 +89,10 @@ if __name__ == "__main__":
 
         generation_counter += 1
 
-    # for p in sorted(population, key=lambda x: x.rank):
-    #     print(p)
-    #     print("---------------")
+    for p in sorted(population, key=lambda x: x.rank):
+        p.contigs += contigs_number(p, scores)
+        print(p)
+        print("---------------")
+
     print("DONE.\n")
-    print("EXECTION TIME:: {} Seconds.".format(time() - start))
+    print("EXECTION TIME:: {} Seconds.".format(round(time() - start)))

@@ -653,3 +653,13 @@ def mutation(population: List[Solution], selection: List[int], hash_values: Set[
                     Solution(sol, generation=generation_counter))
 
     return mutation_childs
+
+
+def contigs_number(solution: Solution, scores: List[List[int]]) -> int:
+    contigs_counter = 0
+    temp = solution.genome.copy()
+    for index in range(0, len(temp) - 1):
+        if scores[temp[index]][temp[index + 1]] == 0:
+            contigs_counter += 1
+
+    return contigs_counter 
