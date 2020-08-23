@@ -60,9 +60,9 @@ class Solution:
 
         self.genome = genome
         self.genome_size = len(self.genome)
-        self.oaf = 0
-        self.odf = 0
         self.generation = generation
+        self.oaf = -1
+        self.odf = -1
         self.rank = -1
         self.crowding_distance = -1
         self.contigs = 1
@@ -90,6 +90,7 @@ class Solution:
         None
         """
 
+        self.oaf = 0
         # Can't explain, take a look at the research paper(/papers)
         for i in range(self.genome_size - 1):
             self.oaf += scores[self.genome[i]][self.genome[i + 1]] * 2
@@ -109,6 +110,7 @@ class Solution:
             None
         """
 
+        self.odf = 0
         # Can't explain, take a look at the research paper(/papers)
         for i in range(self.genome_size - 2):
             p = i
