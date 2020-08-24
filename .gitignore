@@ -7,5 +7,3 @@ models/__pycache__/*
 
 # .mypy_cache
 .mypy_cache/*
-
-scores/*
