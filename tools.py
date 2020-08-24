@@ -68,7 +68,7 @@ def read_fragments(file_name: str) -> List[Fragment]:
     return fragments
 
 
-def waterman_algorithm(str_1: str, str_2: str, match_score: int, mismatch_score: int, gap_cost: int) -> int:
+def waterman_algorithm(str_1: str, str_2: str, match_score: int, mismatch_score: int, gap_cost: int) -> float:
     """Take a look at The smith waterman algorithm.
 
     ...
@@ -88,8 +88,8 @@ def waterman_algorithm(str_1: str, str_2: str, match_score: int, mismatch_score:
 
     Rturns
     ------
-    int
-        An int, represeting the lenght of The Longest Common Substring.
+    float
+        An float, represeting the lenght of The Longest Common Substring.
     """
 
     len_1 = len(str_1)
@@ -119,7 +119,7 @@ def waterman_algorithm(str_1: str, str_2: str, match_score: int, mismatch_score:
     return result
 
 
-def overlap(frag_1: Fragment, frag_2: Fragment, match_score: int, mismatch_score: int, gap_cost: int) -> int:
+def overlap(frag_1: Fragment, frag_2: Fragment, match_score: int, mismatch_score: int, gap_cost: int) -> float:
     """This function calculates the overlap of two fragments,
     in our case means the longest common nucleotides sequence,
     based on the same method of the waterman_algorithm.
@@ -142,13 +142,13 @@ def overlap(frag_1: Fragment, frag_2: Fragment, match_score: int, mismatch_score
 
     Returns
     -------
-    int
-       The longest common nucleotides sequence.
+    float
+       The value of the walterman algorith applied on the fragments sequences.
     """
     return waterman_algorithm(frag_1.sequence, frag_2.sequence, match_score, mismatch_score, gap_cost)
 
 
-def overlap_scores(fragments: List[Fragment], match_score: int, mismatch_score: int, gap_cost: int) -> List[List[int]]:
+def overlap_scores(fragments: List[Fragment], match_score: int, mismatch_score: int, gap_cost: int) -> List[List[float]]:
     """This function calculates the overlap scores between each fragment
     and another, then the scores are all stored in a matrix.
 
@@ -172,7 +172,7 @@ def overlap_scores(fragments: List[Fragment], match_score: int, mismatch_score: 
     Returns
     -------
     list
-        A list of lists(matrix) of int, that contains the overlaping scores.
+        A list of lists(matrix) of float, that contains the overlaping scores.
     """
 
     len_frag = len(fragments)

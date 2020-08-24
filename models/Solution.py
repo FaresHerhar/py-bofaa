@@ -75,7 +75,7 @@ class Solution:
         out = "* Genome:: {}\n* Genome size:: {}\n* OAF::{}\n* ODF:: {}\n* Rank:: {}\n* Crowding distance:: {}\n* Contigs number:: {}\n* Generation:: {}"
         return out.format(self.genome, self.genome_size, self.oaf, self.odf, self.rank, self.crowding_distance, self.contigs, self.generation)
 
-    def oaf_objective(self, scores: List[List[int]]) -> None:
+    def oaf_objective(self, scores: List[List[float]]) -> None:
         """It is  the first objective function, Overlaping Adjacent Fragments.
 
         ...
@@ -95,7 +95,7 @@ class Solution:
         for i in range(self.genome_size - 1):
             self.oaf += scores[self.genome[i]][self.genome[i + 1]] * 2
 
-    def odf_objective(self, scores: List[List[int]]) -> None:
+    def odf_objective(self, scores: List[List[float]]) -> None:
         """It is  the second objective function, Overlaping Distant Fragments.
 
         ...
@@ -118,7 +118,7 @@ class Solution:
                 self.odf += ((j - p) *
                              scores[self.genome[i]][self.genome[j]]) * 2
 
-    def contigs_number(self, scores: List[List[int]]) -> None:
+    def contigs_number(self, scores: List[List[float]]) -> None:
         """It is the function that calculates the number of contigs in a solution.
         For a genome of N fragments, initially NC=1 and for i=1, 2, ...,N-1,
         if score[i, i+1]=0 then NC=NC+1.
