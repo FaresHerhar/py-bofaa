@@ -4,7 +4,6 @@ from math import factorial
 from models.Fragment import Fragment
 
 
-
 def max_possible_samples(n: int, k: int) -> int:
     """This function is for calculating the maximum number of possible
     combination with no repetition, while keeping different order
