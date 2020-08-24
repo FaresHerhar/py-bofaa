@@ -178,7 +178,7 @@ def overlap_scores(fragments: List[Fragment], match_score: int, mismatch_score: 
     len_frag = len(fragments)
 
     # Creating the matrix
-    scores = [[-1 for i in range(len_frag)] for j in range(len_frag)]
+    scores = [[-1.0 for i in range(len_frag)] for j in range(len_frag)]
 
     for i in range(0, len_frag - 1):
         for j in range(i + 1, len_frag):
