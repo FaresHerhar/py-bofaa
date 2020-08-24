@@ -4,7 +4,6 @@ from math import factorial
 
 from models.Fragment import Fragment
 from models.Solution import Solution
-from scores import scores
 
 
 def max_possible_samples(n: int, k: int) -> int:
@@ -69,6 +68,57 @@ def read_fragments(file_name: str) -> List[Fragment]:
     return fragments
 
 
+def waterman_algorithm(str_1: str, str_2: str, match_score: int, mismatch_score: int, gap_cost: int) -> int:
+    """Take a look at The smith waterman algorithm.
+
+    ...
+
+    Parameters
+    ----------
+    str_1: str
+        The first sequence(string)
+    str_1: str
+        The second sequence(string
+    match_score: int
+        A positive int, we add in case to caracters match.
+    mismatch_score: int
+        A negative int, we add in case to caracters don't match.
+    gap_cost: int
+        A negative int, for the gap.
+
+    Rturns
+    ------
+    int
+        An int, represeting the lenght of The Longest Common Substring.
+    """
+
+    len_1 = len(str_1)
+    len_2 = len(str_2)
+    # The scoring result
+    result = 0
+
+    # Make a mtrix, to store the matches,
+    # and mismatches, and to calculate the final result.
+    # Both the row, and column number 0, are skiped.
+    # Check The Longest Common Subsequence problem.
+    H = [[0 for k in range(len_2 + 1)] for l in range(len_1 + 1)]
+
+    for i in range(len_1 + 1):
+        for j in range(len_2 + 1):
+            # skip this one because it doesn't represent any thing.
+            if (i == 0) or (j == 0):
+                H[i][j] = 0
+            else:
+                match = H[i - 1][j - 1] + \
+                    (match_score if str_1[i - 1] ==
+                     str_2[j - 1] else + mismatch_score)
+                delete = H[i - 1][j] + gap_cost
+                insert = H[i][j - 1] + gap_cost
+                result = H[i][j] = max(match, delete, insert, 0)
+
+    return result
+
+
 def overlap(frag_1: Fragment, frag_2: Fragment, match_score: int, mismatch_score: int, gap_cost: int) -> int:
     """This function calculates the overlap of two fragments,
     in our case means the longest common nucleotides sequence,
@@ -95,7 +145,7 @@ def overlap(frag_1: Fragment, frag_2: Fragment, match_score: int, mismatch_score
     int
        The longest common nucleotides sequence.
     """
-    return scores.waterman_algorithm(frag_1.sequence.encode("UTF-8"), frag_2.sequence.encode("UTF-8"), match_score, mismatch_score, gap_cost)
+    return waterman_algorithm(frag_1.sequence, frag_2.sequence, match_score, mismatch_score, gap_cost)
 
 
 def overlap_scores(fragments: List[Fragment], match_score: int, mismatch_score: int, gap_cost: int) -> List[List[int]]:
