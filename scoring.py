@@ -2,6 +2,7 @@ from typing import List
 
 from models.Fragment import Fragment
 
+
 def waterman_algorithm(str_1: str, str_2: str, match_score: int, mismatch_score: int, gap_cost: int) -> float:
     """Take a look at The smith waterman algorithm.
 
