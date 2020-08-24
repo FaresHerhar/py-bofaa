@@ -1,25 +1,18 @@
-from tools import *
 from time import time
+
+from tools import read_fragments
+from config import *
+from scoring import *
+from nsga2 import *
 
 
 if __name__ == "__main__":
-    CROSS_OVER_PROBABILITY = 0.8
-    MUTATION_PROBABILITY = 0.8
-    GENERATIONS_NUMBER = 100
-    POPULATION_SIZE = 10
-    OVECTIVE_FUNCTIONS_NUMBER = 2
-    MATCH_SCORE = 1
-    MISMATCH_SCORE = -1
-    GAP_COST = -1.33
-    BECHMARK_FILE = "benchmarks/dna-instances/x60189_4.dat"
-    # BECHMARK_FILE = "benchmarks/test.dat"
-
     # Counting the number of generations
     generation_counter = 1
 
     start = time()
     # STEP 0, reading fragments from file
-    print("STEP-0 :: READING FRAGMENTS.")
+    print("STEP-0 :: READING FRAGMENTS FROM FILE --> {}".format(BECHMARK_FILE))
     fragments = read_fragments(BECHMARK_FILE)
 
     # STEP 1, compute pair wise overlap
@@ -56,7 +49,7 @@ if __name__ == "__main__":
         print("\tG-{} --> STEP-7.1 :: OPERATING CROSSOVER.".format(generation_counter))
         # STEP 7.1, crossover
         childs = crossover(population, selection,
-                            hash_values, generation_counter)
+                           hash_values, generation_counter)
 
         print("\tG-{} --> STEP-7.2 :: OPERATING MUTATION.".format(generation_counter))
         # STEP 7.2, mutation
@@ -93,9 +86,10 @@ if __name__ == "__main__":
         generation_counter += 1
 
     for p in sorted(population, key=lambda x: x.rank):
-        p.contigs_number(scores)
-        print(p)
-        print("---------------")
+        if p.rank == 1:
+            p.contigs_number(scores)
+            print(p)
+            print("---------------")
 
     print("DONE.\n")
     print("EXECTION TIME:: {} Seconds.".format(round(time() - start)))
