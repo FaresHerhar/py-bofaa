@@ -1,9 +1,11 @@
 from time import time
 
 from tools import read_fragments
+from MultiObjective import MultiObjective as mo
+from NsGa2 import NsGa2 as nsga2
 from config import *
 from scoring import *
-from nsga2 import *
+
 
 
 if __name__ == "__main__":
@@ -21,7 +23,7 @@ if __name__ == "__main__":
 
     # STEP 2, generate initial population, and retreving the set of the solutions
     print("STEP-2 :: GENERATING SOLUTIONS (INITIAL POPULATION).")
-    population = init_population(len(fragments), POPULATION_SIZE)
+    population = mo.init_population(len(fragments), POPULATION_SIZE)
     population, hash_values = population[0], population[-1]
 
     while generation_counter <= GENERATIONS_NUMBER:
@@ -35,25 +37,25 @@ if __name__ == "__main__":
 
         print("\tG-{} --> STEP-4 :: CALCULATING AND ATTRIBUTING FONTS.".format(generation_counter))
         # STEP 4, calculate the fonts
-        fonts = non_dominate_sorting(population)
+        fonts = mo.non_dominate_sorting(population)
 
         print("\tG-{} --> STEP-5 :: CALCULATING CROWDING DISTANCES.".format(generation_counter))
         # STEP 5, calculate the crowding distances
-        crownding = crowding_distance(population, fonts)
+        crownding = mo.crowding_distance(population, fonts)
 
         print("\tG-{} --> STEP-6 :: SELECTING SOLUTIONS POOL.".format(generation_counter))
         # STEP 6, select solutions for pool
-        selection = select_cross_solutions(population, CROSS_OVER_PROBABILITY)
+        selection = nsga2.select_cross_solutions(population, CROSS_OVER_PROBABILITY)
 
         # STEP 7, crossover and mutation
         print("\tG-{} --> STEP-7.1 :: OPERATING CROSSOVER.".format(generation_counter))
         # STEP 7.1, crossover
-        childs = crossover(population, selection,
+        childs = nsga2.crossover(population, selection,
                            hash_values, generation_counter)
 
         print("\tG-{} --> STEP-7.2 :: OPERATING MUTATION.".format(generation_counter))
         # STEP 7.2, mutation
-        childs.extend(mutation(population, selection,
+        childs.extend(nsga2.mutation(population, selection,
                                hash_values, MUTATION_PROBABILITY, generation_counter))
 
         # STEP 8, offsoring
@@ -71,11 +73,11 @@ if __name__ == "__main__":
 
         print("\tG-{} --> STEP-8.3 :: CALCULATING AND ATTRIBUTING FONTS FOR THE OFFSPRING POPULATION.".format(generation_counter))
         # STEP 8.3, recalculate the fonts for the offspring population
-        fonts = non_dominate_sorting(population)
+        fonts = mo.non_dominate_sorting(population)
 
         print("\tG-{} --> STEP-8.4 :: CALCULATING CROWDING DISTANCES FOR THE OFFSPRING POPULATION.".format(generation_counter))
         # STEP 8.4, recalculate the crowding distances for the offspring population
-        crownding = crowding_distance(population, fonts)
+        crownding = mo.crowding_distance(population, fonts)
 
         print("\tG-{} --> STEP-9 :: PASSING THE FIRST {} OFFSSPRING SOLUTION THE NEXT GENERATION POPULATION.".format(
             generation_counter, GENERATIONS_NUMBER))
@@ -85,11 +87,15 @@ if __name__ == "__main__":
 
         generation_counter += 1
 
-    for p in sorted(population, key=lambda x: x.rank):
-        if p.rank == 1:
-            p.contigs_number(scores)
-            print(p)
-            print("---------------")
+    # Gtting the somution
+    print("\nSOLUTIONS::\n")
+    population = [p for p in population if p.rank == 1]
+    population.sort(key=lambda x: x.contigs)
+
+    for p in population:
+        p.contigs_number(scores)
+        print(p)
+        print("------------")
 
     print("DONE.\n")
     print("EXECTION TIME:: {} Seconds.".format(round(time() - start)))
