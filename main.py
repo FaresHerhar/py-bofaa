@@ -7,7 +7,6 @@ from config import *
 from scoring import *
 
 
-
 if __name__ == "__main__":
     # Counting the number of generations
     generation_counter = 1
@@ -45,18 +44,19 @@ if __name__ == "__main__":
 
         print("\tG-{} --> STEP-6 :: SELECTING SOLUTIONS POOL.".format(generation_counter))
         # STEP 6, select solutions for pool
-        selection = nsga2.select_cross_solutions(population, CROSS_OVER_PROBABILITY)
+        selection = nsga2.select_cross_solutions(
+            population, CROSS_OVER_PROBABILITY)
 
         # STEP 7, crossover and mutation
         print("\tG-{} --> STEP-7.1 :: OPERATING CROSSOVER.".format(generation_counter))
         # STEP 7.1, crossover
         childs = nsga2.crossover(population, selection,
-                           hash_values, generation_counter)
+                                 hash_values, generation_counter)
 
         print("\tG-{} --> STEP-7.2 :: OPERATING MUTATION.".format(generation_counter))
         # STEP 7.2, mutation
         childs.extend(nsga2.mutation(population, selection,
-                               hash_values, MUTATION_PROBABILITY, generation_counter))
+                                     hash_values, MUTATION_PROBABILITY, generation_counter))
 
         # STEP 8, offsoring
         print("\tG-{} --> STEP-8.1 :: CALCULATING OBJECTIVE FUNCTIONS FOR CHILDS.".format(generation_counter))
@@ -89,11 +89,18 @@ if __name__ == "__main__":
 
     # Gtting the somution
     print("\nSOLUTIONS::\n")
+    # Take only the elemnts of the first fonts i.e rnak=1
     population = [p for p in population if p.rank == 1]
-    population.sort(key=lambda x: x.contigs)
 
+    # Calculate the number of contigs
     for p in population:
         p.contigs_number(scores)
+
+    # Sort population by the number of contigs
+    population.sort(key=lambda x: x.contigs)
+
+    # Print the solution
+    for p in population:
         print(p)
         print("------------")
 
