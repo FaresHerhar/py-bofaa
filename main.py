@@ -22,8 +22,7 @@ if __name__ == "__main__":
 
     # STEP 2, generate initial population, and retreving the set of the solutions
     print("STEP-2 :: GENERATING SOLUTIONS (INITIAL POPULATION).")
-    population = mo.init_population(len(fragments), POPULATION_SIZE)
-    population, hash_values = population[0], population[-1]
+    population, hash_values = mo.init_population(len(fragments), POPULATION_SIZE)
 
     while generation_counter <= GENERATIONS_NUMBER:
         print("GENERATION :: {}".format(generation_counter))
