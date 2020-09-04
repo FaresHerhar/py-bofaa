@@ -7,14 +7,14 @@ from config import *
 from scoring import *
 
 
-if __name__ == "__main__":
+def run_nsga2(benchmark_file: str) -> None:
     # Counting the number of generations
     generation_counter = 1
 
     start = time()
     # STEP 0, reading fragments from file
-    print("STEP-0 :: READING FRAGMENTS FROM FILE --> {}".format(BECHMARK_FILE))
-    fragments = read_fragments(BECHMARK_FILE)
+    print("STEP-0 :: READING FRAGMENTS FROM FILE --> {}".format(benchmark_file))
+    fragments = read_fragments(benchmark_file)
 
     # STEP 1, compute pair wise overlap
     print("STEP-1 :: CALCULATING THE OVERLAP SCORES.")
