@@ -108,4 +108,5 @@ def run_nsga2(benchmark_file: str) -> None:
     print("EXECTION TIME:: {} Seconds.".format(round(time() - start)))
 
 
-run_nsga2(BECHMARK_FILE)
+if __name__ == "__main__":
+    run_nsga2(BECHMARK_FILE)
