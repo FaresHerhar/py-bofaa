@@ -3,7 +3,7 @@ from typing import List
 from models.Fragment import Fragment
 
 
-def waterman_algorithm(str_1: str, str_2: str, match_score: int, mismatch_score: int, gap_cost: int) -> float:
+def waterman_algorithm(str_1: str, str_2: str, match_score: float, mismatch_score: float, gap_cost: float) -> float:
     """Take a look at The smith waterman algorithm.
 
     ...
@@ -30,26 +30,26 @@ def waterman_algorithm(str_1: str, str_2: str, match_score: int, mismatch_score:
     len_1 = len(str_1)
     len_2 = len(str_2)
     # The scoring result
-    result = 0
+    result = 0.0
 
     # Make a mtrix, to store the matches,
     # and mismatches, and to calculate the final result.
     # Both the row, and column number 0, are skiped.
     # Check The Longest Common Subsequence problem.
-    H = [[0 for k in range(len_2 + 1)] for l in range(len_1 + 1)]
+    H = [[0.0 for k in range(len_2 + 1)] for l in range(len_1 + 1)]
 
     for i in range(len_1 + 1):
         for j in range(len_2 + 1):
             # skip this one because it doesn't represent any thing.
             if (i == 0) or (j == 0):
-                H[i][j] = 0
+                H[i][j] = 0.0
             else:
                 match = H[i - 1][j - 1] + \
                     (match_score if str_1[i - 1] ==
                      str_2[j - 1] else + mismatch_score)
                 delete = H[i - 1][j] + gap_cost
                 insert = H[i][j - 1] + gap_cost
-                result = H[i][j] = max(match, delete, insert, 0)
+                result = H[i][j] = max(match, delete, insert, 0.0)
 
     return result
 
