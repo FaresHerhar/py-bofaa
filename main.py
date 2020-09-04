@@ -8,6 +8,7 @@ from scoring import *
 
 
 def run_nsga2(benchmark_file: str) -> None:
+    print("USING THE NSGA-II Algorithm.")
     # Counting the number of generations
     generation_counter = 1
 
@@ -105,3 +106,6 @@ def run_nsga2(benchmark_file: str) -> None:
 
     print("DONE.\n")
     print("EXECTION TIME:: {} Seconds.".format(round(time() - start)))
+
+
+run_nsga2(BECHMARK_FILE)
