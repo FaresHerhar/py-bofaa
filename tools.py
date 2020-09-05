@@ -1,5 +1,5 @@
 from typing import List
-from math import factorial
+from math import factorial, floor
 
 from models.Fragment import Fragment
 
@@ -64,3 +64,35 @@ def read_fragments(file_name: str) -> List[Fragment]:
         count += 1
 
     return fragments
+
+
+def kthperm(list_, k) -> List[int]:
+    """This function is for calculating the combinaison of the 
+    index number K in the lexecographic order of the vector S
+    it is a non recursive version with complexité O(n)
+    ...
+
+    Parameters
+    ----------
+    list_: list
+        The table of set to be permuted to get the combinaison of the k-th index.
+    k: int
+        The index from the lexicographie order of the combinations wanted.
+
+    Rturns
+    ------
+    list
+        The combination of the index k.
+    """
+
+    P = []
+    while list_ != []:
+        f = factorial(len(list_)-1)
+        i = floor(k//f)
+        if i > len(list_)-1:
+            i = len(list_)-1
+        x = list_[i]
+        k = k % f
+        P.append(x)
+        list_ = list_[:i] + list_[i+1:]
+    return P
