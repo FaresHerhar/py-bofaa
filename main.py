@@ -32,16 +32,16 @@ def run_nsga2(benchmark_file: str) -> None:
         sol.oaf_objective(scores)
         sol.odf_objective(scores)
 
+    print("STEP-4 :: CALCULATING AND ATTRIBUTING FONTS.")
+    # STEP 4, calculate the fonts
+    fonts = mo.non_dominate_sorting(population)
+
+    print("STEP-5 :: CALCULATING CROWDING DISTANCES.")
+    # STEP 5, calculate the crowding distances
+    crownding = mo.crowding_distance(population, fonts)
+
     while generation_counter <= GENERATIONS_NUMBER:
         print("GENERATION :: {}".format(generation_counter))
-
-        print("\tG-{} --> STEP-4 :: CALCULATING AND ATTRIBUTING FONTS.".format(generation_counter))
-        # STEP 4, calculate the fonts
-        fonts = mo.non_dominate_sorting(population)
-
-        print("\tG-{} --> STEP-5 :: CALCULATING CROWDING DISTANCES.".format(generation_counter))
-        # STEP 5, calculate the crowding distances
-        crownding = mo.crowding_distance(population, fonts)
 
         print("\tG-{} --> STEP-6 :: SELECTING SOLUTIONS POOL.".format(generation_counter))
         # STEP 6, select solutions for pool
