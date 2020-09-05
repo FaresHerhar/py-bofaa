@@ -23,16 +23,17 @@ def run_nsga2(benchmark_file: str) -> None:
 
     # STEP 2, generate initial population, and retreving the set of the solutions
     print("STEP-2 :: GENERATING SOLUTIONS (INITIAL POPULATION).")
-    population, hash_values = mo.init_population(len(fragments), POPULATION_SIZE)
+    population, hash_values = mo.init_population(
+        len(fragments), POPULATION_SIZE)
+
+    print("STEP-3 :: CALCULATING OBJECTIVE FUNCTIONS.")
+    # STEP 3, compute ODF and OAF fitness
+    for sol in population:
+        sol.oaf_objective(scores)
+        sol.odf_objective(scores)
 
     while generation_counter <= GENERATIONS_NUMBER:
         print("GENERATION :: {}".format(generation_counter))
-
-        print("\tG-{} --> STEP-3 :: CALCULATING OBJECTIVE FUNCTIONS.".format(generation_counter))
-        # STEP 3, compute ODF and OAF fitness
-        for sol in population:
-            sol.oaf_objective(scores)
-            sol.odf_objective(scores)
 
         print("\tG-{} --> STEP-4 :: CALCULATING AND ATTRIBUTING FONTS.".format(generation_counter))
         # STEP 4, calculate the fonts
