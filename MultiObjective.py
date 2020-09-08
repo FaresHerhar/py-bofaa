@@ -27,13 +27,6 @@ class MultiObjective:
             A list of Solution.
         """
 
-        # Check if the wanted population, is larger than
-        # Maximum possible number of samples, see max_possible_samples()
-        if population_size > max_possible_samples(fragments_number,
-                                                  fragments_number):
-            raise ValueError(
-                "The number of the population is bigger than the maximum possible number of samples")
-
         l = [i for i in range(fragments_number)]  # Our fragments, indexes
 
         # The hash values of each solution to avoid redundancy.
