@@ -104,10 +104,11 @@ def run_nsga2(benchmark_file: str) -> None:
     
     # Print the solution
     for p in population:
-        file = open("/home/fares/Desktop/lol.txt", "a+")
+        file = open("/home/fares/lol.txt", "a+")
         file.write(out.format(p.genome, p.genome_size, p.oaf, p.odf,
                               p.rank, p.crowding_distance, p.contigs, p.generation))
         file.close()
+        break
 
         print(p)
         print("------------")
