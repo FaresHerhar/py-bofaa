@@ -100,8 +100,15 @@ def run_nsga2(benchmark_file: str) -> None:
     # Sort population by the number of contigs
     population.sort(key=lambda x: x.contigs)
 
+    out = "* Genome:: {}\n* Genome size:: {}\n* OAF::{}\n* ODF:: {}\n* Rank:: {}\n* Crowding distance:: {}\n* Contigs number:: {}\n* Generation:: {}"
+    
     # Print the solution
     for p in population:
+        file = open("/home/fares/Desktop/lol.txt", "a+")
+        file.write(out.format(p.genome, p.genome_size, p.oaf, p.odf,
+                              p.rank, p.crowding_distance, p.contigs, p.generation))
+        file.close()
+
         print(p)
         print("------------")
 
