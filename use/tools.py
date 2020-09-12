@@ -4,33 +4,6 @@ from math import factorial, floor
 from models.Fragment import Fragment
 
 
-def max_possible_samples(n: int, k: int) -> int:
-    """This function is for calculating the maximum number of possible
-    combination with no repetition, while keeping different order
-    (look for the law of combinations/permutation, in Probabilistic).
-
-    ...
-
-    Parameters
-    ----------
-    n: int
-        The size of the set.
-    k: int
-        The wanted size, for the generated combinations.
-
-    Rturns
-    ------
-    int
-        The maximum number of possible combination.
-    """
-
-    if n < k:
-        raise ValueError(
-            "There is in error in your input, the size of the sample k,should not exeed the size of the space n.")
-
-    return int(factorial(n)/factorial(n-k))
-
-
 def read_fragments(file_name: str) -> List[Fragment]:
     """This function is for the initial step of the application,
     we read all the fragments, from the DNA sample file found.
