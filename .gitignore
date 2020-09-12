@@ -4,6 +4,8 @@
 # __pycache__
 __pycache__/*
 models/__pycache__/*
+use/__pycache__/*
+algorithm/__pycache__/*
 
 # .mypy_cache
 .mypy_cache/*
