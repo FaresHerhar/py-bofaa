@@ -7,17 +7,17 @@ from config import *
 from scoring import *
 
 
-def run_nsga2(benchmark_file: str) -> None:
+if __name__ == "__main__":
     print("USING THE NSGA-II Algorithm.")
     # Counting the number of generations
     generation_counter = 1
 
     start = time()
     # STEP 0, reading fragments from file
-    print("STEP-0 :: READING FRAGMENTS FROM FILE --> {}".format(benchmark_file))
-    fragments = read_fragments(benchmark_file)
+    print("STEP-0 :: READING FRAGMENTS FROM FILE --> {}".format(BECHMARK_FILE))
+    fragments = read_fragments(BECHMARK_FILE)
 
-    # STEP 1, compute pair wise overlap
+    # STEP 1, compute pair wise overlap²
     print("STEP-1 :: CALCULATING THE OVERLAP SCORES.")
     scores = overlap_scores(fragments, MATCH_SCORE, MISMATCH_SCORE, GAP_COST)
 
@@ -103,19 +103,11 @@ def run_nsga2(benchmark_file: str) -> None:
     out = "* Genome:: {}\n* Genome size:: {}\n* OAF::{}\n* ODF:: {}\n* Rank:: {}\n* Crowding distance:: {}\n* Contigs number:: {}\n* Generation:: {}"
     
     # Print the solution
-    for p in population:
-        file = open("/home/fares/lol.txt", "a+")
-        file.write(out.format(p.genome, p.genome_size, p.oaf, p.odf,
-                              p.rank, p.crowding_distance, p.contigs, p.generation))
-        file.close()
-        break
-
-        print(p)
-        print("------------")
+    print(population[0])
+    print("------------")
+    # for p in population:
+    #     print(p)
+    #     print("------------")
 
     print("DONE.\n")
     print("EXECTION TIME:: {} Seconds.".format(round(time() - start)))
-
-
-if __name__ == "__main__":
-    run_nsga2(BECHMARK_FILE)
