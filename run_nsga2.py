@@ -1,10 +1,10 @@
 from time import time
 
-from tools import read_fragments
-from MultiObjective import MultiObjective as mo
-from NsGa2 import NsGa2 as nsga2
+from use.tools import read_fragments
+from algorithm.MultiObjective import MultiObjective as mo
+from algorithm.NsGa2 import NsGa2 as nsga2
 from config import *
-from scoring import *
+from use.scoring import *
 
 
 if __name__ == "__main__":

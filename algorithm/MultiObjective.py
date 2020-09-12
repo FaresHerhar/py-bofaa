@@ -1,7 +1,7 @@
 from typing import List, Tuple, Set
 from random import sample, randint, random
 
-from tools import max_possible_samples
+from use.tools import max_possible_samples
 from models.Solution import Solution
 
 

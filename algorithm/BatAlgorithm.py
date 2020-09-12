@@ -1,10 +1,9 @@
-from  random import randint, gauss, uniform
-from tools import *
-from MultiObjective import MultiObjective as mo
+from random import randint, gauss, uniform
+from use.tools import *
+from algorithm.MultiObjective import MultiObjective as mo
 from math import factorial, floor, exp
 from typing import List, Tuple, Set
 from models.Solution import Solution
-from MultiObjective import *
 
 
 
