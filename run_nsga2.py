@@ -24,7 +24,7 @@ if __name__ == "__main__":
     # STEP 2, generate initial population, and retreving the set of the solutions
     print("STEP-2 :: GENERATING SOLUTIONS (INITIAL POPULATION).")
     population, hash_values = mo.init_population(
-        len(fragments), POPULATION_SIZE)
+        len(fragments), NSGA_POPULATION_SIZE)
 
     print("STEP-3 :: CALCULATING OBJECTIVE FUNCTIONS.")
     # STEP 3, compute ODF and OAF fitness
@@ -84,7 +84,7 @@ if __name__ == "__main__":
             generation_counter, GENERATIONS_NUMBER))
         # STEP 9, passing the next first POPULATION_SIZE solutions
         temp = [index for indexes in fonts for index in indexes]
-        population = [population[p] for p in temp[:POPULATION_SIZE]]
+        population = [population[p] for p in temp[:NSGA_POPULATION_SIZE]]
 
         generation_counter += 1
 
