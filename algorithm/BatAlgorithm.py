@@ -6,7 +6,6 @@ from typing import List, Tuple, Set
 from models.Solution import Solution
 
 
-
 class BatAlgorithm():
     def __init__(self, D, NP, N_Gen, NF, A, r, Alpha, Gama, Qmin, Qmax, scores):
         self.D = D  # number of Bats for each individual in the population
@@ -93,7 +92,6 @@ class BatAlgorithm():
             solutions.append(init_sol)
             position.append(combinaison)
         return solutions, position
-
 
     def correct(self, x: int) -> int:
         """This function correct the index of the Bat to avoide 
