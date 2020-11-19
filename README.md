@@ -53,3 +53,7 @@ You can simply change the `confi.py` file format, but keep the execution order o
 
 [Herhar Fares](https://github.com/HerharFares)  
 [Brahim Benyoub](mailto:brahim.weldtest@gmail.com)
+
+## Note
+
+***Use the PyPy compiler, because it will take a very long time for the code to be executed, using the standard Python compiler.***
