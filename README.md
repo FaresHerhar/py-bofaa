@@ -1,5 +1,9 @@
 # PyBofaa
 
+## Description
+
+An implementatoin of the multi-objective metaheuristcs ***Multi-objective Genetic Algorithm (NSGA-II)*** and ***Multi-objective Bat Algorithm (MOBA)***, to the *DNA fragment assembly problem - FAP*, while taking three objectives: Minimizing the number of oweverlaping distant fragments, Maximizing the number of oweverlaping adjacent fragments, and Minimizing the number of contigs; in order to solve the FAP problem and optimize the solution.
+
 ## Tools
 
 * Language: Python 3.6
