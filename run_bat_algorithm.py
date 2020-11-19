@@ -1,8 +1,9 @@
-from config import *
-from use.scoring import *
 from time import time
-from algorithm.BatAlgorithm import *
+
+from config import *
 from use.tools import read_fragments
+from use.scoring import *
+from algorithm.BatAlgorithm import *
 
 
 if __name__ == "__main__":

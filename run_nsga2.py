@@ -1,10 +1,10 @@
 from time import time
 
 from use.tools import read_fragments
+from use.scoring import *
 from algorithm.MultiObjective import MultiObjective as mo
 from algorithm.NsGa2 import NsGa2 as nsga2
 from config import *
-from use.scoring import *
 
 
 if __name__ == "__main__":
@@ -101,7 +101,7 @@ if __name__ == "__main__":
     population.sort(key=lambda x: x.contigs)
 
     out = "* Genome:: {}\n* Genome size:: {}\n* OAF::{}\n* ODF:: {}\n* Rank:: {}\n* Crowding distance:: {}\n* Contigs number:: {}\n* Generation:: {}"
-    
+
     # Print the solution
     print(population[0])
     print("------------")

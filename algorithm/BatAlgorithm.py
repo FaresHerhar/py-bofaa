@@ -1,8 +1,9 @@
 from random import randint, gauss, uniform
-from use.tools import kthperm
-from algorithm.MultiObjective import MultiObjective as mo
 from math import factorial, floor, exp
 from typing import List, Tuple, Set
+
+from use.tools import kthperm
+from algorithm.MultiObjective import MultiObjective as mo
 from models.Solution import Solution
 
 
